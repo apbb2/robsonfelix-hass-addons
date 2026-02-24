@@ -142,6 +142,17 @@ Since tmux captures mouse events, copy/paste works differently:
 
 **Note**: Regular right-click paste and simple mouse selection won't work because tmux intercepts these events for scrolling.
 
+#### Authenticating Claude Code (first launch)
+
+The authentication URL can be long and may wrap across multiple lines. To handle this:
+
+1. **Zoom out** your browser (`Ctrl + -` or `Cmd + -`) until the URL fits on a single line
+2. **Click the link** — it should open in a new tab
+3. Complete authentication in the browser and **copy the auth code**
+4. Click back on the terminal and **paste** with `Shift+Insert` or `Ctrl+Shift+V`
+
+If clicking the link doesn't work, hold `Ctrl+Shift` while selecting the URL with your mouse to copy it, then paste it into your browser's address bar.
+
 ### Scrolling and Session Persistence Trade-offs
 
 **With tmux (`session_persistence: true`):**
@@ -183,6 +194,8 @@ Claude Code manages its own authentication. If you have issues:
 1. Type `claude` to start the authentication flow
 2. Follow the prompts to log in or enter your API key
 3. Credentials are saved automatically for future sessions
+
+**Can't copy the URL or paste the auth code?** The terminal uses tmux, which changes how copy/paste works. See [Copy and Paste in tmux](#copy-and-paste-in-tmux) for instructions.
 
 ### hass-mcp not working
 
