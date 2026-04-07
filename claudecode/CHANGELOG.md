@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.65] - 2026-04-07
+
+### Fixed
+- OAuth URL displayed as malformed/multi-line in terminal by setting COLUMNS=220 in bash environment, preventing Claude Code from wrapping the auth URL
+
+## [1.2.64] - 2026-04-07
+
+### Added
+- Model selection config option: choose between claude-opus-4-6, claude-sonnet-4-6 (default), and claude-haiku-4-5-20251001
+- Selected model is applied via ANTHROPIC_MODEL env var at startup
+- Auto-update Claude Code (existing feature) keeps new models accessible without add-on updates
+
 ## [1.2.63] - 2026-02-23
 
 ### Fixed

@@ -44,6 +44,13 @@ configuration:
     description: >-
       Verifica e instala automáticamente actualizaciones de Claude Code al iniciar el add-on.
       Mantiene Claude Code actualizado sin necesidad de actualizar la versión del add-on.
+  model:
+    name: Modelo Claude
+    description: >-
+      El modelo Claude a utilizar. claude-sonnet-4-6 ofrece el mejor equilibrio entre
+      velocidad y capacidad. claude-opus-4-6 es el más poderoso. claude-haiku-4-5-20251001
+      es el más rápido. La actualización automática de Claude Code (arriba) garantiza que
+      los nuevos modelos estén disponibles sin necesidad de actualizar el add-on.
 
 network:
   7681/tcp: Terminal Web (ttyd)

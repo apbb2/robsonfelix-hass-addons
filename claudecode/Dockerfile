@@ -113,6 +113,7 @@ EOF
 RUN cat > /root/.bashrc << 'EOF'
 export TERM=xterm-256color
 export LANG=C.UTF-8
+export COLUMNS=220
 PS1='\[\033[1;36m\]claude-code\[\033[0m\]:\[\033[1;34m\]\w\[\033[0m\]\$ '
 
 # Function to update MCP token before starting Claude
@@ -234,6 +235,9 @@ CMD ["/bin/bash", "-c", "\
     echo '[INFO] Checking for Claude Code updates...' && \
     npm update -g @anthropic-ai/claude-code 2>/dev/null || echo '[WARN] Update check failed, continuing...'; \
   fi && \
+  MODEL=$(jq -r '.model // \"claude-sonnet-4-6\"' /data/options.json) && \
+  export ANTHROPIC_MODEL=\"$MODEL\" && \
+  echo \"[INFO] Using Claude model: $MODEL\" && \
   claude mcp remove homeassistant -s user 2>/dev/null || true && \
   claude mcp remove playwright -s user 2>/dev/null || true && \
   if [ \"$ENABLE_MCP\" = \"true\" ]; then \
