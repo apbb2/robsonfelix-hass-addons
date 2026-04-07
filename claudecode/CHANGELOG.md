@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.66] - 2026-04-07
+
+### Fixed
+- Claude Code updates now install to the correct location: replaced `npm update -g` with `npm install -g @anthropic-ai/claude-code@latest` to match build-time install behavior
+- Set `DISABLE_AUTOUPDATER=1` to prevent Claude Code's built-in self-updater from installing to `~/.local/bin/` (a different path that doesn't persist across container restarts)
+
 ## [1.2.65] - 2026-04-07
 
 ### Fixed

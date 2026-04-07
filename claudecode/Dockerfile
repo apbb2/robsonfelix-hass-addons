@@ -12,7 +12,8 @@ LABEL org.opencontainers.image.licenses="MIT"
 ENV \
     LANG=C.UTF-8 \
     LC_ALL=C.UTF-8 \
-    TERM=xterm-256color
+    TERM=xterm-256color \
+    DISABLE_AUTOUPDATER=1
 
 # Install system dependencies (ttyd installed separately as static binary)
 RUN apk add --no-cache \
@@ -233,7 +234,7 @@ CMD ["/bin/bash", "-c", "\
   AUTO_UPDATE=$(jq -r '.auto_update_claude // true' /data/options.json) && \
   if [ \"$AUTO_UPDATE\" = \"true\" ]; then \
     echo '[INFO] Checking for Claude Code updates...' && \
-    npm update -g @anthropic-ai/claude-code 2>/dev/null || echo '[WARN] Update check failed, continuing...'; \
+    npm install -g @anthropic-ai/claude-code@latest 2>/dev/null || echo '[WARN] Update check failed, continuing...'; \
   fi && \
   MODEL=$(jq -r '.model // \"claude-sonnet-4-6\"' /data/options.json) && \
   export ANTHROPIC_MODEL=\"$MODEL\" && \
