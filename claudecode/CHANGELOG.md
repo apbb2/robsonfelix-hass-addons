@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.93] - 2026-04-11
+
+### Changed
+- Version bump above upstream 2.1.92 so HA detects this fork as an upgrade
+
 ## [1.2.71] - 2026-04-11
 
 ### Fixed
