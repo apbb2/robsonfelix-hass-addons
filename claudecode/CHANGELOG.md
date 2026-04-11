@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.69] - 2026-04-11
+
+### Added
+- HA persistent notification when Claude Code update is available: appears in the HA UI bell/notification area and is automatically dismissed once up-to-date
+
 ## [1.2.68] - 2026-04-11
 
 ### Added

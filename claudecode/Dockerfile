@@ -273,13 +273,17 @@ CMD ["/bin/bash", "-c", "\
     SHELL_CMD='bash --login'; \
   fi && \
   (while true; do \
-    IV=$(npm ls -g @anthropic-ai/claude-code --depth=0 2>/dev/null | grep claude-code | cut -d@ -f3) && \
-    LV=$(npm show @anthropic-ai/claude-code version 2>/dev/null) && \
+    IV=$(npm ls -g @anthropic-ai/claude-code --depth=0 2>/dev/null | grep claude-code | cut -d@ -f3); \
+    LV=$(npm show @anthropic-ai/claude-code version 2>/dev/null); \
     if [ -n \"$LV\" ] && [ -n \"$IV\" ] && [ \"$IV\" != \"$LV\" ]; then \
       echo \"$LV\" > $PERSIST_DIR/.update_notice; \
       echo \"[INFO] Claude Code update available: $LV (installed: $IV)\"; \
+      printf '{\"title\":\"Claude Code Update Available\",\"message\":\"Version %s is available (installed: %s). Restart the add-on to update.\",\"notification_id\":\"claude_code_update\"}' \"$LV\" \"$IV\" \
+        | curl -sf -X POST -H \"Authorization: Bearer $SUPERVISOR_TOKEN\" -H \"Content-Type: application/json\" -d @- http://supervisor/core/api/services/persistent_notification/create 2>/dev/null || true; \
     else \
       rm -f $PERSIST_DIR/.update_notice 2>/dev/null; \
+      printf '{\"notification_id\":\"claude_code_update\"}' \
+        | curl -sf -X POST -H \"Authorization: Bearer $SUPERVISOR_TOKEN\" -H \"Content-Type: application/json\" -d @- http://supervisor/core/api/services/persistent_notification/dismiss 2>/dev/null || true; \
     fi; \
     sleep 3600; \
   done) & \
