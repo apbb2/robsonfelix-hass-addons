@@ -133,6 +133,10 @@ alias ha-config='cd /homeassistant'
 alias ha-logs='cat /homeassistant/home-assistant.log 2>/dev/null || echo "Log not found"'
 EOF
 
+# Create update notification script and wire into .bashrc
+RUN echo '[ -f /homeassistant/.claudecode/.update_notice ] && echo -e "\033[1;33m[UPDATE AVAILABLE]\033[0m Claude Code $(cat /homeassistant/.claudecode/.update_notice) is available - restart the add-on to update"' > /root/.claude-notify.sh
+RUN echo 'source /root/.claude-notify.sh' >> /root/.bashrc
+
 # Ensure .bashrc is sourced for login shells too
 RUN echo 'source ~/.bashrc' > /root/.profile
 
@@ -268,6 +272,17 @@ CMD ["/bin/bash", "-c", "\
   else \
     SHELL_CMD='bash --login'; \
   fi && \
+  (while true; do \
+    IV=$(npm ls -g @anthropic-ai/claude-code --depth=0 2>/dev/null | grep claude-code | cut -d@ -f3) && \
+    LV=$(npm show @anthropic-ai/claude-code version 2>/dev/null) && \
+    if [ -n \"$LV\" ] && [ -n \"$IV\" ] && [ \"$IV\" != \"$LV\" ]; then \
+      echo \"$LV\" > $PERSIST_DIR/.update_notice; \
+      echo \"[INFO] Claude Code update available: $LV (installed: $IV)\"; \
+    else \
+      rm -f $PERSIST_DIR/.update_notice 2>/dev/null; \
+    fi; \
+    sleep 3600; \
+  done) & \
   cd /homeassistant && \
   exec ttyd --port 7681 --writable --ping-interval 30 --max-clients 5 \
     -t fontSize=$FONT_SIZE \

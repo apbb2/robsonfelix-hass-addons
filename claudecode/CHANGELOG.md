@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.68] - 2026-04-11
+
+### Added
+- Update available notification: background process checks npm hourly and writes a notice file; terminal displays a yellow banner on open when a newer Claude Code version is available
+
 ## [1.2.67] - 2026-04-07
 
 ### Changed
