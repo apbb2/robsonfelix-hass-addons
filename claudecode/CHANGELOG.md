@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.95] - 2026-04-11
+
+### Fixed
+- "sessionstart: startup hook error": HASS_TOKEN is now injected into the hass-mcp server env config at startup, not only when using the `c` alias
+
 ## [2.1.94] - 2026-04-11
 
 ### Fixed
