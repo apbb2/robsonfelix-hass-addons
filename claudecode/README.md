@@ -114,6 +114,15 @@ Three models are available:
 
 Enable `auto_update_claude` to ensure new models become available as Anthropic releases them, without needing an add-on update.
 
+## Update Notifications
+
+When `auto_update_claude` is enabled, the add-on checks for newer versions of Claude Code in the background every hour. If an update is available:
+
+- A **persistent notification** appears in the HA UI notification bell with the title "Claude Code Update Available"
+- A **yellow banner** is shown in the terminal each time you open a session
+
+Both clear automatically after restarting the add-on, which installs the latest version on startup.
+
 ## File Locations
 
 | Path | Description | Access |
