@@ -56,7 +56,10 @@ RUN case "${BUILD_ARCH}" in \
     chmod +x /usr/bin/ttyd
 
 # Install Claude Code via npm
-RUN npm install -g @anthropic-ai/claude-code@latest --no-fund --no-audit
+# BUILD_VERSION is passed automatically by HA and busts the Docker cache on every version bump
+ARG BUILD_VERSION=dev
+RUN echo "Building add-on ${BUILD_VERSION} - installing latest Claude Code" && \
+    npm install -g @anthropic-ai/claude-code@latest --no-fund --no-audit
 
 # Install hass-mcp for Home Assistant integration and pymodbus for Modbus operations
 RUN pip3 install --no-cache-dir --break-system-packages hass-mcp pymodbus pyserial

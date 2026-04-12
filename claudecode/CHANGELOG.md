@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.97] - 2026-04-12
+
+### Fixed
+- Docker cache no longer causes stale Claude Code version in builds: `BUILD_VERSION` (auto-passed by HA) is declared before the npm install, forcing a fresh `@latest` fetch on every version bump
+
 ## [2.1.96] - 2026-04-12
 
 ### Changed
