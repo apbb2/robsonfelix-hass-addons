@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.96] - 2026-04-12
+
+### Changed
+- Rebuild to pick up latest @anthropic-ai/claude-code release
+
 ## [2.1.95] - 2026-04-11
 
 ### Fixed
