@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.98] - 2026-04-12
+
+### Fixed
+- OAuth URL still wrapping: previous fix set the shell COLUMNS variable but Claude Code is Node.js and reads PTY width via ioctl. Now also runs `stty cols 220` at shell start and before each `claude`/`cc` invocation to set the actual PTY width that Node.js reads.
+
 ## [2.1.97] - 2026-04-12
 
 ### Fixed
