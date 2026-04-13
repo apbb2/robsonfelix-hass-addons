@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.99] - 2026-04-12
+
+### Fixed
+- Auto-update now shows progress in logs: compares installed vs latest version, logs the update action, and confirms completion — no longer silently hangs with no output
+
 ## [2.1.98] - 2026-04-12
 
 ### Fixed

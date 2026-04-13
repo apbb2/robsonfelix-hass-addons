@@ -242,8 +242,15 @@ CMD ["/bin/bash", "-c", "\
   fi && \
   AUTO_UPDATE=$(jq -r '.auto_update_claude // true' /data/options.json) && \
   if [ \"$AUTO_UPDATE\" = \"true\" ]; then \
-    echo '[INFO] Checking for Claude Code updates...' && \
-    npm install -g @anthropic-ai/claude-code@latest 2>/dev/null || echo '[WARN] Update check failed, continuing...'; \
+    CURRENT_VER=$(npm ls -g @anthropic-ai/claude-code --depth=0 2>/dev/null | grep claude-code | cut -d@ -f3) && \
+    LATEST_VER=$(npm show @anthropic-ai/claude-code version 2>/dev/null) && \
+    if [ -n \"$LATEST_VER\" ] && [ \"$CURRENT_VER\" != \"$LATEST_VER\" ]; then \
+      echo \"[INFO] Updating Claude Code from $CURRENT_VER to $LATEST_VER...\"; \
+      npm install -g @anthropic-ai/claude-code@latest --no-fund --no-audit 2>&1 | grep -E '(added|updated|claude-code)' || true; \
+      echo \"[INFO] Claude Code updated to $LATEST_VER\"; \
+    else \
+      echo \"[INFO] Claude Code $CURRENT_VER is up to date\"; \
+    fi; \
   fi && \
   MODEL=$(jq -r '.model // \"claude-sonnet-4-6\"' /data/options.json) && \
   export ANTHROPIC_MODEL=\"$MODEL\" && \
