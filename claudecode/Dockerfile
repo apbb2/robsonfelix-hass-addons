@@ -12,7 +12,8 @@ LABEL org.opencontainers.image.licenses="MIT"
 ENV \
     LANG=C.UTF-8 \
     LC_ALL=C.UTF-8 \
-    TERM=xterm-256color
+    TERM=xterm-256color \
+    DISABLE_AUTOUPDATER=1
 
 # Install system dependencies (ttyd installed separately as static binary)
 RUN apk add --no-cache \
@@ -252,7 +253,7 @@ CMD ["/bin/bash", "-c", "\
     LATEST_VER=$(npm show @anthropic-ai/claude-code version 2>/dev/null) && \
     if [ -n \"$LATEST_VER\" ] && [ -n \"$CURRENT_VER\" ] && [ \"$CURRENT_VER\" != \"$LATEST_VER\" ]; then \
       echo \"[INFO] Updating Claude Code from $CURRENT_VER to $LATEST_VER...\"; \
-      claude update 2>&1 || true; \
+      yes 2>/dev/null | timeout 120 claude update 2>&1 || true; \
       echo \"[INFO] Claude Code update complete: $(claude --version 2>/dev/null)\"; \
     else \
       echo \"[INFO] Claude Code $CURRENT_VER is up to date\"; \

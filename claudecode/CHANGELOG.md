@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.3] - 2026-04-14
+
+### Fixed
+- Add-on failed to start: `claude update` in the startup CMD (no TTY) was hanging waiting for interactive input. Now pipes `yes` and uses `timeout 120` to prevent blocking startup.
+- Restored `DISABLE_AUTOUPDATER=1` to prevent Claude Code's background auto-updater from interfering with startup commands (`claude mcp remove/add-json`).
+
 ## [2.2.2] - 2026-04-12
 
 ### Fixed
