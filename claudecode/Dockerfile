@@ -134,10 +134,11 @@ alias c='update_mcp_token && stty cols 220 2>/dev/null; claude'
 alias cc='update_mcp_token && stty cols 220 2>/dev/null; claude --continue'
 alias ha-config='cd /homeassistant'
 alias ha-logs='cat /homeassistant/home-assistant.log 2>/dev/null || echo "Log not found"'
+alias claude-update='echo "Updating Claude Code..." && npm install -g @anthropic-ai/claude-code@latest --no-fund --no-audit 2>&1 | grep -E "(added|updated|claude-code)" || true && echo "Done: $(claude --version 2>/dev/null)"'
 EOF
 
 # Create update notification script and wire into .bashrc
-RUN echo '[ -f /homeassistant/.claudecode/.update_notice ] && echo -e "\033[1;33m[UPDATE AVAILABLE]\033[0m Claude Code $(cat /homeassistant/.claudecode/.update_notice) is available - restart the add-on to update"' > /root/.claude-notify.sh
+RUN echo '[ -f /homeassistant/.claudecode/.update_notice ] && echo -e "\033[1;33m[UPDATE AVAILABLE]\033[0m Claude Code $(cat /homeassistant/.claudecode/.update_notice) available - restart the add-on or run: claude-update"' > /root/.claude-notify.sh
 RUN echo 'source /root/.claude-notify.sh' >> /root/.bashrc
 # Set PTY width so Node.js apps (like Claude Code) read 220 cols via ioctl, not just the COLUMNS shell var
 RUN echo 'stty cols 220 rows 50 2>/dev/null || true' >> /root/.bashrc

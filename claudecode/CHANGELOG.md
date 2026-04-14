@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.0] - 2026-04-14
+
+### Added
+- `claude-update` terminal alias: run it from the terminal to update Claude Code instantly without restarting the add-on
+- Update notification now mentions `claude-update` as an alternative to restarting
+
+### Changed
+- No add-on version bump needed to update Claude Code: just restart the add-on (triggers auto-update) or run `claude-update` in the terminal
+
 ## [2.1.99] - 2026-04-12
 
 ### Fixed
