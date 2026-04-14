@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.1] - 2026-04-14
+
+### Fixed
+- `claude-update` and auto-update failing because Claude Code's postinstall script calls `sudo`, which HA's security profile blocks. Added a passthrough `sudo` wrapper (container already runs as root so elevation is unnecessary).
+
 ## [2.2.0] - 2026-04-14
 
 ### Added

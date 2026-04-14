@@ -55,6 +55,10 @@ RUN case "${BUILD_ARCH}" in \
     curl -fsSL "https://github.com/tsl0922/ttyd/releases/download/1.7.7/ttyd.${TTYD_ARCH}" -o /usr/bin/ttyd && \
     chmod +x /usr/bin/ttyd
 
+# Provide a passthrough sudo so Claude Code's postinstall script doesn't fail
+# (container runs as root so sudo is unnecessary, but HA's security profile blocks the real binary)
+RUN printf '#!/bin/sh\nexec "$@"\n' > /usr/local/bin/sudo && chmod +x /usr/local/bin/sudo
+
 # Install Claude Code via npm
 # BUILD_VERSION is passed automatically by HA and busts the Docker cache on every version bump
 ARG BUILD_VERSION=dev
