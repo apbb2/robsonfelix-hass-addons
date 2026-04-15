@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.4] - 2026-04-14
+
+### Fixed
+- Startup crash: jq filters with string literals (`.terminal_theme // "dark"`, `.model // "claude-sonnet-4-6"`, etc.) were receiving literal backslash-quotes (`\"`) instead of double quotes when run inside the Docker CMD JSON array. Replaced all string literals in jq filters with `--arg` variables which require no quoting.
+
 ## [2.2.3] - 2026-04-14
 
 ### Fixed

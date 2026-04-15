@@ -232,14 +232,14 @@ CMD ["/bin/bash", "-c", "\
   mkdir -p $PERSIST_DIR/local-bin && \
   if [ ! -L /root/.local/bin ]; then rm -rf /root/.local/bin; ln -s $PERSIST_DIR/local-bin /root/.local/bin; fi && \
   FONT_SIZE=$(jq -r '.terminal_font_size // 14' /data/options.json) && \
-  THEME=$(jq -r '.terminal_theme // \"dark\"' /data/options.json) && \
+  THEME=$(jq -r --arg d dark '.terminal_theme // $d' /data/options.json) && \
   SESSION_PERSIST=$(jq -r '.session_persistence // true' /data/options.json) && \
   ENABLE_MCP=$(jq -r '.enable_mcp // true' /data/options.json) && \
   ENABLE_PLAYWRIGHT=$(jq -r '.enable_playwright_mcp // false' /data/options.json) && \
-  PLAYWRIGHT_HOST=$(jq -r '.playwright_cdp_host // \"\"' /data/options.json) && \
+  PLAYWRIGHT_HOST=$(jq -r --arg d '' '.playwright_cdp_host // $d' /data/options.json) && \
   if [ -z \"$PLAYWRIGHT_HOST\" ] && [ \"$ENABLE_PLAYWRIGHT\" = \"true\" ]; then \
     echo '[INFO] Auto-detecting Playwright Browser hostname...' && \
-    PLAYWRIGHT_HOST=$(curl -s -H \"Authorization: Bearer $SUPERVISOR_TOKEN\" http://supervisor/addons | jq -r '.data.addons[] | select(.slug | endswith(\"playwright-browser\") or endswith(\"_playwright-browser\")) | .hostname' | head -1) && \
+    PLAYWRIGHT_HOST=$(curl -s -H \"Authorization: Bearer $SUPERVISOR_TOKEN\" http://supervisor/addons | jq -r --arg s1 playwright-browser --arg s2 _playwright-browser '.data.addons[] | select(.slug | (endswith($s1) or endswith($s2))) | .hostname' | head -1) && \
     if [ -n \"$PLAYWRIGHT_HOST\" ] && [ \"$PLAYWRIGHT_HOST\" != \"null\" ]; then \
       echo \"[INFO] Found Playwright Browser: $PLAYWRIGHT_HOST\"; \
     else \
@@ -259,7 +259,7 @@ CMD ["/bin/bash", "-c", "\
       echo \"[INFO] Claude Code $CURRENT_VER is up to date\"; \
     fi; \
   fi && \
-  MODEL=$(jq -r '.model // \"claude-sonnet-4-6\"' /data/options.json) && \
+  MODEL=$(jq -r --arg d claude-sonnet-4-6 '.model // $d' /data/options.json) && \
   export ANTHROPIC_MODEL=\"$MODEL\" && \
   echo \"[INFO] Using Claude model: $MODEL\" && \
   claude mcp remove homeassistant -s user 2>/dev/null || true && \
