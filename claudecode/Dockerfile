@@ -108,13 +108,11 @@ RUN mkdir -p \
 # Configure tmux with large scrollback buffer and scroll support
 RUN cat > /root/.tmux.conf << 'EOF'
 set -g history-limit 20000
-# Disable alternate screen buffer to allow terminal scrollback
+# Use primary screen (not alternate) so xterm.js owns the scrollback buffer
 set -ga terminal-overrides ',xterm*:smcup@:rmcup@'
-# Enable mouse support for scrolling (but may affect copy/paste)
-set -g mouse on
-# Bind mouse wheel to scroll through history in copy mode
-bind -n WheelUpPane if-shell -F -t = "#{mouse_any_flag}" "send-keys -M" "if -Ft= '#{pane_in_mode}' 'send-keys -M' 'select-pane -t=; copy-mode -e; send-keys -M'"
-bind -n WheelDownPane select-pane -t= \; send-keys -M
+# Mouse off: browser/xterm.js handles scrolling and copy/paste natively
+# This fixes touch scrolling on iPad and standard copy/paste on all devices
+set -g mouse off
 EOF
 
 # Configure bash with aliases and prompt

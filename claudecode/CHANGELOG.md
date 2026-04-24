@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.0] - 2026-04-24
+
+### Changed
+- Disabled tmux mouse mode (`set -g mouse off`). tmux was intercepting all mouse and touch events, breaking native browser copy/paste and iPad touch scrolling. With mouse off, the browser's xterm.js terminal handles scrolling (20,000 line buffer via ttyd) and copy/paste natively. Session persistence is unchanged — tmux still maintains the session across reconnects.
+
 ## [2.2.9] - 2026-04-16
 
 ### Fixed
