@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.1] - 2026-04-24
+
+### Fixed
+- After `claude update`, running `claude` still used the old version due to bash's command hash table caching the npm-installed path. On startup, `run.sh` now symlinks `/usr/local/bin/claude` → the persisted binary when one exists, so there is only ever one `claude` in PATH regardless of hash state.
+
 ## [2.3.0] - 2026-04-24
 
 ### Changed

@@ -76,6 +76,13 @@ CLAUDEMD
 mkdir -p "$PERSIST_DIR/local-bin"
 [ ! -L /root/.local/bin ] && { rm -rf /root/.local/bin; ln -s "$PERSIST_DIR/local-bin" /root/.local/bin; }
 
+# If a newer claude was installed via `claude update`, point /usr/local/bin/claude at it.
+# This avoids bash hash-table issues where the shell caches the old npm-installed path.
+if [ -f "$PERSIST_DIR/local-bin/claude" ]; then
+    ln -sf "$PERSIST_DIR/local-bin/claude" /usr/local/bin/claude
+    echo "[INFO] Using updated Claude Code: $(claude --version 2>/dev/null)"
+fi
+
 # Read options from HA config
 FONT_SIZE=$(jq -r '.terminal_font_size // 14' /data/options.json)
 THEME=$(jq -r --arg d dark '.terminal_theme // $d' /data/options.json)
