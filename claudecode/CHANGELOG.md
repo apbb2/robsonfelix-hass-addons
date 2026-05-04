@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.3] - 2026-04-24
+
+### Fixed
+- "Claude symlink points to missing or invalid binary" warning on startup. `claude update` stores the actual version binaries in `~/.local/share/claude/versions/` — only `~/.local/bin/` (the symlink) was being persisted, so after a container rebuild the symlink survived but its target was gone. Now `~/.local/share/claude/` is also persisted to persistent storage.
+
 ## [2.3.2] - 2026-04-24
 
 ### Changed

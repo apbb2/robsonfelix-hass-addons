@@ -72,9 +72,14 @@ CLAUDEMD
 [ ! -L /root/.config/claude-code ] && { rm -rf /root/.config/claude-code; ln -s "$PERSIST_DIR/config" /root/.config/claude-code; }
 [ ! -L /root/.claude.json ] && { touch "$PERSIST_DIR/.claude.json"; rm -f /root/.claude.json; ln -s "$PERSIST_DIR/.claude.json" /root/.claude.json; }
 
-# Persist ~/.local/bin so `claude update` installs survive container rebuilds
+# Persist ~/.local/bin and ~/.local/share/claude across container rebuilds.
+# claude update stores symlinks in local-bin and actual version binaries in local-share-claude.
+# Without persisting both, the symlink survives but points to a missing binary after rebuild.
 mkdir -p "$PERSIST_DIR/local-bin"
 [ ! -L /root/.local/bin ] && { rm -rf /root/.local/bin; ln -s "$PERSIST_DIR/local-bin" /root/.local/bin; }
+
+mkdir -p "$PERSIST_DIR/local-share-claude" /root/.local/share
+[ ! -L /root/.local/share/claude ] && { rm -rf /root/.local/share/claude; ln -s "$PERSIST_DIR/local-share-claude" /root/.local/share/claude; }
 
 # If a newer claude was installed via `claude update`, point /usr/local/bin/claude at it.
 # This avoids bash hash-table issues where the shell caches the old npm-installed path.
