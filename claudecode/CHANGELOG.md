@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.4] - 2026-04-24
+
+### Fixed
+- Add-on install/update appeared hung in HA with no output during the Claude Code npm download step (can take 30-60 seconds). Added a background ticker that prints progress every 20 seconds so HA shows the build is still running.
+
 ## [2.3.3] - 2026-04-24
 
 ### Fixed

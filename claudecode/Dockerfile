@@ -62,8 +62,9 @@ RUN printf '#!/bin/sh\nexec "$@"\n' > /usr/local/bin/sudo && chmod +x /usr/local
 # Install Claude Code via npm
 # BUILD_VERSION is passed automatically by HA and busts the Docker cache on every version bump
 ARG BUILD_VERSION=dev
-RUN echo "Building add-on ${BUILD_VERSION} - installing latest Claude Code" && \
-    npm install -g @anthropic-ai/claude-code@latest --no-fund --no-audit
+RUN echo "Building add-on ${BUILD_VERSION} - downloading latest Claude Code (this may take a minute)..." && \
+    (while true; do sleep 20; echo "  ... still installing Claude Code ..."; done) & npm install -g @anthropic-ai/claude-code@latest --no-fund --no-audit 2>&1 && \
+    echo "[INFO] Installed $(claude --version 2>/dev/null)"
 
 # Install hass-mcp for Home Assistant integration and pymodbus for Modbus operations
 RUN pip3 install --no-cache-dir --break-system-packages hass-mcp pymodbus pyserial
