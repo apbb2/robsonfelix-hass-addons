@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.5] - 2026-04-24
+
+### Changed
+- Rebuild to bundle latest Claude Code.
+- Removed install progress ticker — HA's own popup handles the in-progress state; log output is now clean.
+
 ## [2.3.4] - 2026-04-24
 
 ### Fixed
