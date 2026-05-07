@@ -2,7 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.3.5] - 2026-04-24
+## [2.3.6] - 2026-05-05
+
+### Changed
+- Updated bundled Claude Code to latest release.
+- Added `claude-opus-4-7` to the model selector (replaces `claude-opus-4-6`).
+
+### Fixed
+- OAuth/auth URL wrapping across multiple lines when connecting to Claude. tmux resets the PTY width via SIGWINCH when a client attaches, overriding the `stty cols 220` set at shell startup. A `claude()` bash wrapper now re-applies the 220-column PTY width immediately before every `claude` invocation, so auth URLs always render as a single unbroken line.
+
+## [2.3.5] - 2026-05-05
 
 ### Changed
 - Rebuild to bundle latest Claude Code.

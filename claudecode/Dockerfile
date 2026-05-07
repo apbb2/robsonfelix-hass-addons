@@ -132,13 +132,20 @@ update_mcp_token() {
   fi
 }
 
+# Wrapper: set PTY width before Claude launches so auth URLs render as single lines
+# tmux resets PTY width via SIGWINCH on client attach; this re-applies immediately before exec
+claude() {
+    stty cols 220 2>/dev/null
+    command claude "$@"
+}
+
 # Aliases
 alias ll='ls -la'
-alias c='update_mcp_token && stty cols 220 2>/dev/null; claude'
-alias cc='update_mcp_token && stty cols 220 2>/dev/null; claude --continue'
+alias c='update_mcp_token && claude'
+alias cc='update_mcp_token && claude --continue'
 alias ha-config='cd /homeassistant'
 alias ha-logs='cat /homeassistant/home-assistant.log 2>/dev/null || echo "Log not found"'
-alias claude-update='echo "Updating Claude Code..." && claude update 2>&1; echo "Done: $(claude --version 2>/dev/null)"'
+alias claude-update='echo "Updating Claude Code..." && command claude update 2>&1; echo "Done: $(command claude --version 2>/dev/null)"'
 EOF
 
 # Create update notification script and wire into .bashrc
