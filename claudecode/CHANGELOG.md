@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.8] - 2026-05-08
+
+### Fixed
+- Add-on failed to start with "Permission denied" when creating symlink at `/usr/local/bin/claude`. That path is in the read-only Docker image layer and cannot be overwritten at runtime. Removed all `ln -sf /usr/local/bin/claude` calls; instead, the writable npm prefix (`/homeassistant/.claudecode/npm-global/bin`) is now prepended to PATH in both `run.sh` and `.bashrc`, so any installed update automatically takes priority without touching the image layer.
+
 ## [2.3.7] - 2026-05-08
 
 ### Fixed

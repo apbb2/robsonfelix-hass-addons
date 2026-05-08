@@ -5,6 +5,8 @@ export HA_TOKEN="$SUPERVISOR_TOKEN"
 export HA_URL="http://supervisor/core"
 PERSIST_DIR=/homeassistant/.claudecode
 NPM_GLOBAL_DIR="$PERSIST_DIR/npm-global"
+# Prepend writable npm prefix to PATH so any installed update takes priority over the image binary
+export PATH="$NPM_GLOBAL_DIR/bin:$PATH"
 
 mkdir -p "$PERSIST_DIR/config" "$NPM_GLOBAL_DIR" /root/.config
 
@@ -82,14 +84,9 @@ mkdir -p "$PERSIST_DIR/local-bin"
 mkdir -p "$PERSIST_DIR/local-share-claude" /root/.local/share
 [ ! -L /root/.local/share/claude ] && { rm -rf /root/.local/share/claude; ln -s "$PERSIST_DIR/local-share-claude" /root/.local/share/claude; }
 
-# If a newer claude was installed into the writable npm prefix, point /usr/local/bin/claude at it.
-# npm-global takes priority (installed via npm --prefix); local-bin is the legacy claude-update path.
+# Report active version (npm-global/bin is first in PATH, so updated version is used automatically)
 if [ -f "$NPM_GLOBAL_DIR/bin/claude" ]; then
-    ln -sf "$NPM_GLOBAL_DIR/bin/claude" /usr/local/bin/claude
     echo "[INFO] Using npm-updated Claude Code: $(claude --version 2>/dev/null)"
-elif [ -f "$PERSIST_DIR/local-bin/claude" ]; then
-    ln -sf "$PERSIST_DIR/local-bin/claude" /usr/local/bin/claude
-    echo "[INFO] Using updated Claude Code: $(claude --version 2>/dev/null)"
 fi
 
 # Read options from HA config
@@ -125,9 +122,6 @@ if [ "$AUTO_UPDATE" = "true" ]; then
         # that blocks `claude update` (which tries to update the npm global in /usr/local)
         npm install -g "@anthropic-ai/claude-code@$LATEST_VER" \
             --prefix "$NPM_GLOBAL_DIR" --no-fund --no-audit 2>&1 || true
-        if [ -f "$NPM_GLOBAL_DIR/bin/claude" ]; then
-            ln -sf "$NPM_GLOBAL_DIR/bin/claude" /usr/local/bin/claude
-        fi
         echo "[INFO] Claude Code update complete: $(claude --version 2>/dev/null)"
     else
         echo "[INFO] Claude Code $CURRENT_VER is up to date"
