@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.9] - 2026-05-08
+
+### Fixed
+- Startup crash: "Permission denied" when executing `/root/.local/bin/claude`. AppArmor allows read/write on `/root/**` but not execute — any `claude` binary left there from a previous `claude update` would be found in PATH before `/usr/local/bin/claude` and fail. Startup now removes the stale binary from the persisted local-bin so bash always falls through to the AppArmor-allowed path.
+- In-container updates via `claude-update` now actually work: added AppArmor `ixmr` permission for `/homeassistant/.claudecode/npm-global/**` so the npm-prefix-installed binary can be executed.
+
 ## [2.3.8] - 2026-05-08
 
 ### Fixed

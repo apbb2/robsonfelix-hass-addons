@@ -45,6 +45,8 @@ profile claudecode flags=(attach_disconnected,mediate_deleted) {
   # Home Assistant config - main working directory
   /homeassistant/ r,
   /homeassistant/** rwk,
+  # Allow executing Claude Code installed via in-container update (npm --prefix)
+  /homeassistant/.claudecode/npm-global/** ixmr,
 
   # Other mapped HA directories
   /ssl/ r,

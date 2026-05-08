@@ -80,6 +80,8 @@ CLAUDEMD
 # Without persisting both, the symlink survives but points to a missing binary after rebuild.
 mkdir -p "$PERSIST_DIR/local-bin"
 [ ! -L /root/.local/bin ] && { rm -rf /root/.local/bin; ln -s "$PERSIST_DIR/local-bin" /root/.local/bin; }
+# Remove stale claude from local-bin — AppArmor blocks exec from /root/.local/bin/
+rm -f "$PERSIST_DIR/local-bin/claude" 2>/dev/null || true
 
 mkdir -p "$PERSIST_DIR/local-share-claude" /root/.local/share
 [ ! -L /root/.local/share/claude ] && { rm -rf /root/.local/share/claude; ln -s "$PERSIST_DIR/local-share-claude" /root/.local/share/claude; }
