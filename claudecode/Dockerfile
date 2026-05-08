@@ -145,7 +145,7 @@ alias c='update_mcp_token && claude'
 alias cc='update_mcp_token && claude --continue'
 alias ha-config='cd /homeassistant'
 alias ha-logs='cat /homeassistant/home-assistant.log 2>/dev/null || echo "Log not found"'
-alias claude-update='echo "Updating Claude Code..." && command claude update 2>&1; echo "Done: $(command claude --version 2>/dev/null)"'
+alias claude-update='echo "Updating Claude Code..." && npm install -g @anthropic-ai/claude-code@latest --prefix /homeassistant/.claudecode/npm-global --no-fund --no-audit 2>&1 && ln -sf /homeassistant/.claudecode/npm-global/bin/claude /usr/local/bin/claude 2>/dev/null; echo "Done: $(command claude --version 2>/dev/null)"'
 EOF
 
 # Create update notification script and wire into .bashrc

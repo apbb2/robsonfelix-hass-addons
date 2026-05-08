@@ -4,8 +4,9 @@ set -e
 export HA_TOKEN="$SUPERVISOR_TOKEN"
 export HA_URL="http://supervisor/core"
 PERSIST_DIR=/homeassistant/.claudecode
+NPM_GLOBAL_DIR="$PERSIST_DIR/npm-global"
 
-mkdir -p "$PERSIST_DIR/config" /root/.config
+mkdir -p "$PERSIST_DIR/config" "$NPM_GLOBAL_DIR" /root/.config
 
 # Write CLAUDE.md for Claude's context
 cat > "$PERSIST_DIR/CLAUDE.md" << 'CLAUDEMD'
@@ -81,9 +82,12 @@ mkdir -p "$PERSIST_DIR/local-bin"
 mkdir -p "$PERSIST_DIR/local-share-claude" /root/.local/share
 [ ! -L /root/.local/share/claude ] && { rm -rf /root/.local/share/claude; ln -s "$PERSIST_DIR/local-share-claude" /root/.local/share/claude; }
 
-# If a newer claude was installed via `claude update`, point /usr/local/bin/claude at it.
-# This avoids bash hash-table issues where the shell caches the old npm-installed path.
-if [ -f "$PERSIST_DIR/local-bin/claude" ]; then
+# If a newer claude was installed into the writable npm prefix, point /usr/local/bin/claude at it.
+# npm-global takes priority (installed via npm --prefix); local-bin is the legacy claude-update path.
+if [ -f "$NPM_GLOBAL_DIR/bin/claude" ]; then
+    ln -sf "$NPM_GLOBAL_DIR/bin/claude" /usr/local/bin/claude
+    echo "[INFO] Using npm-updated Claude Code: $(claude --version 2>/dev/null)"
+elif [ -f "$PERSIST_DIR/local-bin/claude" ]; then
     ln -sf "$PERSIST_DIR/local-bin/claude" /usr/local/bin/claude
     echo "[INFO] Using updated Claude Code: $(claude --version 2>/dev/null)"
 fi
@@ -117,7 +121,13 @@ if [ "$AUTO_UPDATE" = "true" ]; then
     LATEST_VER=$(npm show @anthropic-ai/claude-code version 2>/dev/null)
     if [ -n "$LATEST_VER" ] && [ -n "$CURRENT_VER" ] && [ "$CURRENT_VER" != "$LATEST_VER" ]; then
         echo "[INFO] Updating Claude Code from $CURRENT_VER to $LATEST_VER..."
-        yes 2>/dev/null | timeout 120 claude update 2>&1 || true
+        # Install into the writable persisted prefix — avoids read-only Docker layer restriction
+        # that blocks `claude update` (which tries to update the npm global in /usr/local)
+        npm install -g "@anthropic-ai/claude-code@$LATEST_VER" \
+            --prefix "$NPM_GLOBAL_DIR" --no-fund --no-audit 2>&1 || true
+        if [ -f "$NPM_GLOBAL_DIR/bin/claude" ]; then
+            ln -sf "$NPM_GLOBAL_DIR/bin/claude" /usr/local/bin/claude
+        fi
         echo "[INFO] Claude Code update complete: $(claude --version 2>/dev/null)"
     else
         echo "[INFO] Claude Code $CURRENT_VER is up to date"

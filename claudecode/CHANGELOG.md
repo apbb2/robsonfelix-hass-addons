@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.7] - 2026-05-08
+
+### Fixed
+- `claude-update` (and auto-update on startup) failed with "read-only filesystem" error. `claude update` detects it was npm-installed and tries to overwrite files in `/usr/local` — a read-only Docker image layer. Now uses `npm install --prefix` to install into the writable persisted directory (`/homeassistant/.claudecode/npm-global/`) and symlinks `/usr/local/bin/claude` to the result. Users can now run `claude-update` from the terminal to get the latest Claude Code without needing a new add-on image.
+
 ## [2.3.6] - 2026-05-05
 
 ### Changed
